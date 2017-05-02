@@ -92,19 +92,19 @@ var msg= {
            <td class="mm_table_actions" width="20%" align="left" >
 
                    <img src='<c:url value="/images/table_edit.png"/>' />
-                   <a href="<c:url value='/tb-ui/authoring/entryAdd.rol'/>?weblogId={{role.weblog.id}}">
+                   <a href="<c:url value='/tb-ui/app/authoring/entryAdd'/>?weblogId={{role.weblog.id}}">
                      <fmt:message key="mainMenu.newEntry" />
                    </a>
                    <br>
 
                    <%-- Show Entries and Comments links for users above EDIT_DRAFT role --%>
                    <span ng-if="role.weblogRole != 'EDIT_DRAFT'">
-                       <c:url var="editEntries" value="/tb-ui/authoring/entries.rol"/>
+                       <c:url var="editEntries" value="/tb-ui/app/authoring/entries"/>
                        <img src='<c:url value="/images/table_multiple.png"/>' />
                        <a href="${editEntries}?weblogId={{role.weblog.id}}"><fmt:message key="mainMenu.editEntries" /></a>
                        <br>
 
-                       <c:url var="manageComments" value="/tb-ui/authoring/comments.rol"/>
+                       <c:url var="manageComments" value="/tb-ui/app/authoring/comments"/>
                        <img src='<c:url value="/images/page_white_edit.png"/>' />
                        <a href="${manageComments}?weblogId={{role.weblog.id}}"><fmt:message key="mainMenu.manageComments" /></a>
                        <br>

@@ -231,20 +231,96 @@ public class UIController {
         return getBlogOwnerPage(principal, null, weblogId, "templates");
     }
 
+    @RequestMapping(value = "/authoring/members")
+    public ModelAndView memberAdmin(Principal principal, @RequestParam String weblogId) {
+        return getBlogOwnerPage(principal, null, weblogId, "members");
+    }
+
+    @RequestMapping(value = "/authoring/bookmarks")
+    public ModelAndView bookmarks(Principal principal, @RequestParam String weblogId) {
+        return getBlogOwnerPage(principal, null, weblogId, "bookmarks");
+    }
+
+    @RequestMapping(value = "/authoring/categories")
+    public ModelAndView categories(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "categories");
+    }
+
     @RequestMapping(value = "/authoring/templateEdit")
     public ModelAndView templateEdit(Principal principal, @RequestParam String weblogId) {
         return getBlogOwnerPage(principal, null, weblogId, "templateEdit");
     }
 
+    @RequestMapping(value = "/authoring/mediaFileChooser")
+    public ModelAndView mediaFileChooser(Principal principal, @RequestParam String weblogId) {
+        return getBlogContributorPage(principal, null, weblogId, "mediaFileChooser");
+    }
+
+    @RequestMapping(value = "/authoring/mediaFileView")
+    public ModelAndView mediaFileView(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "mediaFileView");
+    }
+
+    @RequestMapping(value = "/authoring/mediaFileAdd")
+    public ModelAndView mediaFileAdd(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "mediaFileAdd");
+    }
+
+    @RequestMapping(value = "/authoring/mediaFileEdit")
+    public ModelAndView mediaFileEdit(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "mediaFileEdit");
+    }
+
+    @RequestMapping(value = "/authoring/entryAdd")
+    public ModelAndView entryAdd(Principal principal, @RequestParam String weblogId) {
+        return getBlogContributorPage(principal, null, weblogId, "entryAdd");
+    }
+
+    @RequestMapping(value = "/authoring/entryEdit")
+    public ModelAndView entryEdit(Principal principal, @RequestParam String weblogId) {
+        return getBlogContributorPage(principal, null, weblogId, "entryEdit");
+    }
+
+    @RequestMapping(value = "/authoring/entries")
+    public ModelAndView entries(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "entries");
+    }
+
+    @RequestMapping(value = "/authoring/comments")
+    public ModelAndView comments(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "comments");
+    }
+
+    @RequestMapping(value = "/authoring/tags")
+    public ModelAndView tags(Principal principal, @RequestParam String weblogId) {
+        return getBlogPublisherPage(principal, null, weblogId, "tags");
+    }
+
     private ModelAndView getBlogOwnerPage(Principal principal, Map<String, Object> map, String weblogId, String actionName) {
+        return getBlogPage(principal, map, weblogId, actionName, WeblogRole.OWNER);
+    }
+
+    private ModelAndView getBlogPublisherPage(Principal principal, Map<String, Object> map, String weblogId, String actionName) {
+        return getBlogPage(principal, map, weblogId, actionName, WeblogRole.POST);
+    }
+
+    private ModelAndView getBlogContributorPage(Principal principal, Map<String, Object> map, String weblogId, String actionName) {
+        return getBlogPage(principal, map, weblogId, actionName, WeblogRole.EDIT_DRAFT);
+    }
+
+    private ModelAndView getBlogPage(Principal principal, Map<String, Object> map, String weblogId, String actionName, WeblogRole requiredRole) {
         User user = userManager.getEnabledUserByUserName(principal.getName());
         Weblog weblog = weblogManager.getWeblog(weblogId);
 
-        if (userManager.checkWeblogRole(user, weblog, WeblogRole.OWNER)) {
+        boolean isAdmin = user.hasEffectiveGlobalRole(GlobalRole.ADMIN);
+        UserWeblogRole weblogRole = userManager.getWeblogRole(user, weblog);
+        if (isAdmin || (weblogRole != null && weblogRole.hasEffectiveWeblogRole(requiredRole))) {
             if (map == null) {
                 map = new HashMap<>();
             }
-            map.put("menu", getMenu(user, actionName, WeblogRole.OWNER));
+
+            WeblogRole menuRole = isAdmin ? WeblogRole.OWNER : weblogRole.getWeblogRole();
+            map.put("menu", getMenu(user, actionName, menuRole));
             map.put("weblogId", weblogId);
             return tightblogModelAndView(actionName, map, user, weblog);
         } else {
@@ -289,7 +365,7 @@ public class UIController {
     }
 
     private Menu getMenu(User user, String actionName, WeblogRole requiredRole) {
-        return menuHelper.getMenu(user.getGlobalRole(), requiredRole, actionName, false);
+        return menuHelper.getMenu(user.getGlobalRole(), requiredRole, actionName);
     }
 
 }

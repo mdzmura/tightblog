@@ -46,7 +46,7 @@ $(function() {
 
     $( "#publishDateString" ).datepicker({
         showOn: "button",
-        buttonImage: "../../images/calendar.png",
+        buttonImage: "../../../images/calendar.png",
         buttonImageOnly: true,
         changeMonth: true,
         changeYear: true
@@ -74,11 +74,6 @@ $(function() {
                 }
             }
         ]
-    });
-
-    $("#delete-link").click(function(e) {
-      e.preventDefault();
-      $('#confirm-delete').dialog('open');
     });
 
     $( "#tagAutoComplete" )
@@ -172,7 +167,11 @@ tightblogApp.controller('PageController', ['$http', '$interpolate', '$sce',
                 self.entry.text = html + anchorTag;
                 $("#ql-editor-1").html(self.entry.text);
             } else {
-                self.entry.text += anchorTag;
+                if (self.entry.text) {
+                    self.entry.text += anchorTag;
+                } else {
+                    self.entry.text = anchorTag;
+                }
             }
         }
 
@@ -248,3 +247,16 @@ tightblogApp.controller('PageController', ['$http', '$interpolate', '$sce',
         }
     }]
 );
+
+function showDialog(dialogId) {
+    return {
+        restrict: 'A',
+        link: function(scope, elem, attr, ctrl) {
+            elem.bind('click', function(e) {
+                $(dialogId).dialog('open');
+            });
+        }
+    };
+}
+
+tightblogApp.directive('deleteEntryDialog', function(){return showDialog('#confirm-delete')});

@@ -24,7 +24,7 @@
 
     $( "#startDateString" ).datepicker({
         showOn: "button",
-        buttonImage: "../../images/calendar.png",
+        buttonImage: "../../../images/calendar.png",
         buttonImageOnly: true,
         changeMonth: true,
         changeYear: true
@@ -32,14 +32,14 @@
 
     $( "#endDateString" ).datepicker({
         showOn: "button",
-        buttonImage: "../../images/calendar.png",
+        buttonImage: "../../../images/calendar.png",
         buttonImageOnly: true,
         changeMonth: true,
         changeYear: true
     });
 });
 
-tightblogApp.controller('EntriesController', ['$http', function EntriesController($http) {
+tightblogApp.controller('PageController', ['$http', function PageController($http) {
     var self = this;
     this.lookupFields = {};
     this.searchParams = {
@@ -99,9 +99,9 @@ tightblogApp.controller('EntriesController', ['$http', function EntriesControlle
     };
 
     this.commonErrorResponse = function(response) {
-        if (response.status == 408)
+        if (response.status == 408) {
            window.location.replace($('#refreshURL').attr('value'));
-        if (response.status == 400) {
+        } else if (response.status == 400) {
            self.errorMsg = response.data;
         }
     }

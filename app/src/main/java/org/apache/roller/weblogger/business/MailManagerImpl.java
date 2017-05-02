@@ -162,7 +162,7 @@ public class MailManagerImpl implements MailManager {
             List<String> adminEmails = admins.stream().map(User::getEmailAddress).collect(Collectors.toList());
             String[] to = adminEmails.toArray(new String[adminEmails.size()]);
 
-            String userAdminURL = urlStrategy.getActionURL("userAdmin", "/tb-ui/admin", null, null, true);
+            String userAdminURL = urlStrategy.getActionURL("userAdmin", "/tb-ui/app/admin", null, null, true);
 
             ResourceBundle resources = ResourceBundle.getBundle("ApplicationResources");
             StringBuilder sb = new StringBuilder();
@@ -288,7 +288,7 @@ public class MailManagerImpl implements MailManager {
                 weblog.getLocaleInstance());
         StringBuilder sb = new StringBuilder();
         sb.append(MessageFormat.format(
-                resources.getString("inviteMember.notificationSubject"),
+                resources.getString("members.inviteMemberEmailSubject"),
                 new Object[]{
                         weblog.getName(),
                         weblog.getHandle()})
@@ -296,7 +296,7 @@ public class MailManagerImpl implements MailManager {
         subject = sb.toString();
         sb = new StringBuilder();
         sb.append(MessageFormat.format(
-                resources.getString("inviteMember.notificationContent"),
+                resources.getString("members.inviteMemberEmailContent"),
                 new Object[]{
                         weblog.getName(),
                         weblog.getHandle(),
@@ -361,7 +361,7 @@ public class MailManagerImpl implements MailManager {
 
         Map<String, String> parameters = new HashMap<>();
         parameters.put("bean.entryId", entry.getId());
-        String manageURL = urlStrategy.getActionURL("comments", "/tb-ui/authoring", weblog, parameters, true);
+        String manageURL = urlStrategy.getActionURL("comments", "/tb-ui/app/authoring", weblog, parameters, true);
         ctx.setVariable("manageURL", manageURL);
 
         String msg = mailTemplateEngine.process("PendingCommentNotice.html", ctx);

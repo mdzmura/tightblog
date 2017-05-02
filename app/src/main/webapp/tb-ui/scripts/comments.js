@@ -1,7 +1,7 @@
 $(function() {
     $( "#startDateString" ).datepicker({
         showOn: "button",
-        buttonImage: "../../images/calendar.png",
+        buttonImage: "../../../images/calendar.png",
         buttonImageOnly: true,
         changeMonth: true,
         changeYear: true
@@ -9,7 +9,7 @@ $(function() {
 
     $( "#endDateString" ).datepicker({
         showOn: "button",
-        buttonImage: "../../images/calendar.png",
+        buttonImage: "../../../images/calendar.png",
         buttonImageOnly: true,
         changeMonth: true,
         changeYear: true
@@ -19,8 +19,8 @@ $(function() {
 
 tightblogApp.requires.push('ngSanitize');
 
-tightblogApp.controller('CommentsController', ['$http', '$interpolate', '$sce', '$filter',
-    function CommentsController($http, $interpolate, $sce, $filter) {
+tightblogApp.controller('PageController', ['$http', '$interpolate', '$sce', '$filter',
+    function PageController($http, $interpolate, $sce, $filter) {
     var self = this;
     this.lookupFields = {};
     this.searchParams = {};
@@ -148,9 +148,9 @@ tightblogApp.controller('CommentsController', ['$http', '$interpolate', '$sce', 
     };
 
     this.commonErrorResponse = function(response) {
-        if (response.status == 408)
+        if (response.status == 408) {
            window.location.replace($('#refreshURL').attr('value'));
-        if (response.status == 400) {
+        } else if (response.status == 400) {
            self.errorMsg = response.data;
         }
     }
