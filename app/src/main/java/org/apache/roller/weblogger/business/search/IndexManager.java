@@ -29,15 +29,10 @@ import org.apache.roller.weblogger.pojos.WeblogEntry;
 import java.util.concurrent.locks.ReadWriteLock;
 
 /**
- * Interface to Roller's Lucene-based search facility.
+ * Interface to a blog search facility.
  */
 public interface IndexManager {
     ReadWriteLock getReadWriteLock();
-
-    /**
-     * Does index need to be rebuilt
-     */
-    boolean isInconsistentAtStartup();
 
     /**
      * Remove weblog from index, returns immediately and operates in background
@@ -50,11 +45,6 @@ public interface IndexManager {
     void removeEntryIndexOperation(WeblogEntry entry);
 
     /**
-     * Add entry to index, returns immediately and operates in background
-     */
-    void addEntryIndexOperation(WeblogEntry entry);
-
-    /**
      * Reindex entry, returns immediately and operates in background
      */
     void addEntryReIndexOperation(WeblogEntry entry);
@@ -63,8 +53,6 @@ public interface IndexManager {
      * Execute operation immediately
      */
     void executeIndexOperationNow(final IndexOperation op);
-
-    void resetSharedReader();
 
     IndexReader getSharedIndexReader();
 

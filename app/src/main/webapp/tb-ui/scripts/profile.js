@@ -66,7 +66,7 @@ tightblogApp.controller('PageController', ['$http',
                 if (response.status == 400) {
                    self.errorObj = response.data;
                 } else {
-                   self.commonErrorResponse;
+                   self.commonErrorResponse(response);
                 }
               })
         }
@@ -95,7 +95,7 @@ tightblogApp.controller('PageController', ['$http',
         this.loadMetadata();
         if (userId) {
             this.loadUser();
-        } else if (authMethod == "ldap") {
+        } else if (authMethod == "LDAP") {
             this.loadLDAPData();
         }
     }]
